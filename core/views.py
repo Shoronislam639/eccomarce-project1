@@ -99,6 +99,6 @@ def tag_list(request, tag_slug=None):
 
     context = {
         "products": products,
-        "tag": tag
+        "tag": tag,
     }
     return render(request, 'tag.html', context)
