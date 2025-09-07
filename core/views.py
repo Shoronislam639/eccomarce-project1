@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from core.models import Product,Category,Vendor,CartOrderItems,CartOrder,wishlist,Address,ProductImage,ProductReviews
 from django.db.models import Count
+from taggit.models import Tag
 
 def home(request):
     
@@ -14,7 +15,7 @@ def home(request):
 
 def product_list_view(request):
     
-    products = Product.objects.all(product_status='published')
+    products = Product.objects.filter(product_status='published')
     
     context = {
         "products":products
@@ -70,7 +71,34 @@ def vendor_detail_view(request,vid):
     return render(request, 'vendor-detail.html',context)
 
 
+def product_detail_view(request,pid):
+    product=Product.objects.get(pid=pid)
+    p_image = product.p_image.all()
+    products = Product.objects.filter(Category=product.Category).exclude(pid=pid)[:4]
+    
+    context = {
+        "p":product,
+        "p_image":p_image,
+        "products":products,
+    }
+    return render(request,'product_detail_view.html',context)
 
 
 
 
+
+
+
+def tag_list(request, tag_slug=None):
+    products = Product.objects.filter(product_status='published').order_by("-id")
+    
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        products = products.filter(tags__in=[tag])  # double underscore here
+
+    context = {
+        "products": products,
+        "tag": tag
+    }
+    return render(request, 'tag.html', context)
