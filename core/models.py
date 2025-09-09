@@ -6,6 +6,7 @@ from email.policy import default
 from pyexpat import model
 from unicodedata import decimal
 from taggit.managers import TaggableManager
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 
@@ -67,7 +68,8 @@ class Vendor(models.Model):
     title = models.CharField(max_length=100, default='Nestify')
     image = models.ImageField(upload_to=user_directory_path, default='vendor.jpg')
     cover_image = models.ImageField(upload_to=user_directory_path, default='vendor.jpg')
-    description = models.TextField(null=True,blank=True, default='I am amezing vendor')
+    #description = models.TextField(null=True,blank=True, default='I am amezing vendor')
+    description = RichTextUploadingField(null=True,blank=True, default='I am amezing vendor')
 
     
     address = models.CharField(max_length=300, default="123 Street, City, Country")
@@ -100,12 +102,14 @@ class Product(models.Model):
         
     title = models.CharField(max_length=100, default='Fresh pear')
     image = models.ImageField(upload_to=user_directory_path, default='product.jpg')
-    description = models.TextField(null=True,blank=True, default='This is the product')
+    #description = models.TextField(null=True,blank=True, default='This is the product')
+    description = RichTextUploadingField(null=True,blank=True, default='This is the product')
     
     price = models.DecimalField(max_digits=10, decimal_places=2,default=1.99)
     old_price=models.DecimalField(max_digits=10, decimal_places=2,default=2.59)
     
-    specification = models.TextField(null=True,blank=True)
+    #specification = models.TextField(null=True,blank=True)
+    specification = RichTextUploadingField(null=True,blank=True)
     types = models.CharField(max_length=100, default='Organic',null=True,blank=True)
     stock_count = models.CharField(max_length=100, default='8',null=True,blank=True)
     life = models.CharField(max_length=100, default='100 Days',null=True,blank=True)
@@ -193,9 +197,9 @@ class CartOrderItems(models.Model):
     
 class ProductReviews(models.Model):
     user= models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-    product= models.ForeignKey(Product,on_delete=models.SET_NULL,null=True)
+    product= models.ForeignKey(Product,on_delete=models.SET_NULL,null=True,related_name='reviews')
     review = models.TextField()
-    rating=models.IntegerField(default=None,choices=RATING)
+    rating = models.IntegerField(choices=RATING, default=3)
     date=models.DateTimeField(auto_now_add=True)
         
     class Meta :

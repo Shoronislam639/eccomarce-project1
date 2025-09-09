@@ -1,7 +1,11 @@
 from core.models import Product,Category,Vendor,CartOrderItems,CartOrder,wishlist,Address,ProductImage,ProductReviews
 def default(request): 
     categories=Category.objects.all() 
-    address=Address.objects.get(user=request.user) 
+    try:
+        address=Address.objects.get(user=request.user) 
+    except:
+        address=None
     return{ 
-       "categories":categories, "address":address 
+       "categories":categories, 
+       "address":address,
        }
