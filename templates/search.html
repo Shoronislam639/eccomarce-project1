@@ -1,8 +1,5 @@
 
-
-
-
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
 
     <main class="main">
@@ -11,13 +8,17 @@
                 <div class="archive-header">
                     <div class="row align-items-center">
                         <div class="col-xl-3">
-                            <h1 class="mb-15">{{cetegories.title}}</h1>
+                            {% if query %}
+                            <h1 class="mb-15">{{query}}</h1>
+                            {% else %}
+                            <h3 class="mb-15">No Search Item</h3>
+                            {% endif %}
                             <div class="breadcrumb">
                                 <a href="{% url 'core:home' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                                <span> Shop </span> {{cetegories.title}}
+                                <span><a href="{% url 'core:product_list_view' %}">Products</span> {{query}}
                             </div>
                         </div>
-                       
+                        
                     </div>
                 </div>
             </div>
@@ -27,7 +28,7 @@
                 <div class="col-12">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p>We found <strong class="text-brand">{{products.count}}</strong> item{{products.count|pluralize}} for you!</p>
+                            <p>We found <strong class="text-brand">{{products.count}}</strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
@@ -70,7 +71,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-content" id="myTabContent">
+
+                        <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                                 <div class="row product-grid-4">
                                 {% for p in products %}
@@ -121,24 +123,10 @@
                                    
                                     
                                     {% endfor %}
-                    <!--product grid-->
-                    <div class="pagination-area mt-20 mb-20">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-start">
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fi-rs-arrow-small-left"></i></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#"><i class="fi-rs-arrow-small-right"></i></a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+
+                        <!--end product card-->
+
+                      
                     <section class="section-padding pb-5">
                         <div class="section-title">
                             <h3 class="">Deals Of The Day</h3>
@@ -303,4 +291,6 @@
             </div>
         </div>
     </main>
-   {% endblock %}
+
+
+    {% endblock %}

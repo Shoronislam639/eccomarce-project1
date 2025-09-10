@@ -4,6 +4,7 @@ from django.db.models import Count,Avg
 from taggit.models import Tag
 from core.forms import ProductReviewForm
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 
@@ -92,6 +93,14 @@ def product_detail_view(request,pid):
     review_form =ProductReviewForm()
     
     
+    make_review = True
+    if request.user.is_authenticated:
+        user_review_count = ProductReviews.objects.filter(user=request.user,product=product).count()
+        if user_review_count >0:
+            make_review=False
+        
+    
+    
     context = {
         "p":product,
         "p_image":p_image,
@@ -99,7 +108,8 @@ def product_detail_view(request,pid):
         'reviews':reviews,
         'average_rating':average_rating,
         #from
-        'review_form':review_form
+        'review_form':review_form,
+        'make_review':make_review,
     }
     return render(request,'product_detail_view.html',context)
 
@@ -153,3 +163,38 @@ def ajax_add_review(request,pid):
 
     
     
+    
+    
+    
+    
+def search_view(request):
+    query = request.GET.get("q")
+    
+    products= Product.objects.filter(title__icontains=query).order_by("-date")
+    
+    context={
+        "products":products,
+        "query":query,
+    }
+    
+    return render(request,"search.html",context)
+
+
+
+
+
+def filter_product(request):
+    categories = request.GET.getlist('category[]')
+    vendors = request.GET.getlist('vendor[]')
+
+    products = Product.objects.filter(product_status='published').order_by("-id").distinct()
+    
+    if categories:
+        products = products.filter(Category_id__in=categories)
+
+    if vendors:
+        products = products.filter(vendor_id__in=vendors)
+
+
+    data = render_to_string("async/product-list.html", {"products": products})
+    return JsonResponse({"data": data})

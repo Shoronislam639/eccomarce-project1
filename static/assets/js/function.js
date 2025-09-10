@@ -37,13 +37,13 @@ $("#commentForm").submit(function(e){
                 }
 
 
-                _html += '</div>'; // close product-rate
-                _html += '</div>'; // close mb-10
+                _html += '</div>'; 
+                _html += '</div>'; 
 
                 _html += '<p class="mb-10">'+ res.context.review +'</p>';
-                _html += '</div>'; // close desc
-                _html += '</div>'; // close user
-                _html += '</div>'; // close single-comment
+                _html += '</div>'; 
+                _html += '</div>'; 
+                _html += '</div>'; 
 
                 $(".comment-list").prepend(_html);
                 
@@ -53,3 +53,44 @@ $("#commentForm").submit(function(e){
         
     });
 });
+
+
+
+
+
+
+
+$(document).ready(function(){
+
+    $(".filter-checkbox").on("click",function(){
+        let filter_object = {}
+
+        $(".filter-checkbox").each(function(){
+            let filter_value = $(this).val()
+            let filter_key = $(this).data("filter")
+            console.log(filter_value,filter_key);
+
+            filter_object[filter_key] = Array.from(document.querySelectorAll('input[data-filter="' + filter_key + '"]:checked')).map(function(element){
+                return element.value
+            })
+        })
+        console.log("filter object is",filter_object);
+        $.ajax({
+            url:'/filter-product',
+            data:filter_object,
+            dataType:'json',
+            beforeSend: function(){
+                console.log("sending data ...");
+            },
+            success:function(response){
+                console.log(response);
+                console.log("Data filter successfully...");
+                $("#filtered-product").html(response.data)
+            }
+        })
+    })
+})
+
+
+
+
