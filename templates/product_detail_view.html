@@ -54,14 +54,10 @@
                                                     <span class="font-small ml-5 text-muted"> ({{reviews.count}} review{{reviews.count|pluralize}})</span>
                                                 </div>
                                             </div>
-                                         <div class="clearfix product-price-cover">
-                                                <div class="product-price primary-color float-left">
-                                                    <span class="current-price text-brand">{{p.price}}</span>
-                                                    <span>
-                                                        <span class="save-price font-md color3 ml-15">-{{p.get_percentage|floatformat:0}}% Off</span>
-                                                    <span class="old-price font-md ml-15">{{p.old_price}}</span>
-                                                    </span>
-                                                </div>
+                                            
+                                            <div class = "product-price">
+                                                <span class="current-price text-brand">$<span class="current-price text-brand" id="current-product-price">{{p.price}}</span></span>
+                                                <span class="old-price font-md ml-15" >${{p.old_price}}</span>
                                             </div>
                                             <div class="short-desc mb-30">
                                                 <p class="font-lg">{{p.description|truncatechars:150|safe}}</p>
@@ -77,13 +73,13 @@
                                                 </ul>
                                             </div>-->
                                             <div class="detail-extralink mb-50">
-                                                <div class="detail-qty border radius">
-                                                    <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                    <span class="qty-val">1</span>
-                                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                </div>
+                                                
+                                                    <input type="number" value="1" id="product-quantity" class="w-25 mb-20"> <br>
+                                                
                                                 <div class="product-extra-link2">
-                                                    <button type="submit" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                                    <input type="hidden" name="" id="" value="{{p.id}}" class="product-id">
+                                                    <input type="hidden" name="" id="" value="{{p.title}}" class="product-title">
+                                                    <button type="submit" class="button button-add-to-cart" id="add-to-cart-btn"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                                     <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                                 </div>

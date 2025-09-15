@@ -62,9 +62,17 @@ $("#commentForm").submit(function(e){
 
 $(document).ready(function(){
 
-    $(".filter-checkbox").on("click",function(){
-        let filter_object = {}
+    $(".filter-checkbox, #filter-price-btn").on("click",function(){
+        
 
+
+        let min_price = $("#max_price").attr("min");
+        let max_price = $("#max_price").val();
+
+        let filter_object = {
+        min_price: min_price,
+        max_price: max_price,
+    }
         $(".filter-checkbox").each(function(){
             let filter_value = $(this).val()
             let filter_key = $(this).data("filter")
@@ -89,8 +97,39 @@ $(document).ready(function(){
             }
         })
     })
+    $("#max_price").on("blur", function(){
+        let min_price = $(this).attr("min")
+        let max_price = $(this).attr("max")
+        let current_price = $(this).val()
+
+        if (current_price < parseInt (min_price) || current_price > parseInt (max_price) ){
+            min_price = Math.round(min_price * 100) / 100;
+            max_price = Math.round(max_price * 100) / 100;
+
+            alert("Price must be between $" + min_price + " and $" + max_price)
+            $(this).val(min_price)
+            $('#range').val(min_price)
+            $(this).focus()
+            return false
+        }
+    })
 })
 
 
 
+// add to cart functionality
 
+$("#add-to-cart-btn").on("click", function(){
+    let quantity = $("#product-quantity").val()
+    let product_title = $(".product-title").val()
+    let product_id = $(".product-id").val()
+    let product_price = $("#current-product-price").text()
+    let this_val =$(this)
+
+    console.log("product quantity :",quantity);
+    console.log("product title :",product_title);
+    console.log("product Id :",product_id);
+    console.log("product price :",product_price);
+    console.log("Current element  :",this_val);
+    
+})
