@@ -126,10 +126,13 @@ def tag_list(request, tag_slug=None):
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         products = products.filter(tags__in=[tag])  # double underscore here
+        
+    tags = Tag.objects.all()[:4]
 
     context = {
         "products": products,
         "tag": tag,
+        "tags": tags,
     }
     return render(request, 'tag.html', context)
 
@@ -206,3 +209,32 @@ def filter_product(request):
 
     data = render_to_string("async/product-list.html", {"products": products})
     return JsonResponse({"data": data})
+
+
+
+
+def add_to_cart(request):
+    Cart_product = {}
+    
+    Cart_product[str(request.GET['id'])]={
+        'title' : request.GET['title'],
+        'qty' : request.GET['qty'],
+        'price' : request.GET['price'],
+        'image' : request.GET['image'],
+        'pid' : request.GET['pid'],
+    }
+    
+    if 'Cart_data_obj' in request.session:
+        if str(request.GET['id']) in request.session['Cart_data_obj']:
+            Cart_data = request.session['Cart_data_obj']
+            Cart_data[str(request.GET['id'])]['qty'] = int(Cart_product[str(request.GET['id'])]['qty'])
+            Cart_data.update(Cart_data)
+            request.session['Cart_data_obj'] = Cart_data
+        else:
+            Cart_data = request.session['Cart_data_obj']
+            Cart_data.update(Cart_product)
+            request.session['Cart_data_obj']=Cart_data
+    else:
+        request.session['Cart_data_obj'] = Cart_product
+    return JsonResponse({"data":request.session['Cart_data_obj'],'totalcartitems':len(request.session['Cart_data_obj'])})        
+        

@@ -103,34 +103,22 @@ input[type=range]::-webkit-slider-runnable-track {
                                     
                                     <div class="sidebar-widget widget-tags">
                                         <ul class="tags-list">
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Milk</a>
-                                            </li>
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Broccoli</a>
-                                            </li>
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Smoothie</a>
-                                            </li>
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Fruit</a>
-                                            </li>
-                                            <li class="hover-up mr-0">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Salad</a>
-                                            </li>
-                                            <li class="hover-up mr-0">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Appetizer</a>
-                                            </li>
-                                            <li class="hover-up mr-0 mb-0">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Appetizer</a>
-                                            </li>
+                                            {% for tag in tags %}
+                                                <li class="hover-up">
+                                                    <a href="{% url 'core:tag_list' tag.slug %}" rel="tag">
+                                                        <i class="fi-rs-cross mr-10"></i>{{ tag.name }}
+                                                    </a>
+                                                </li>
+                                            {% empty %}
+                                                <li>No tags found</li>
+                                            {% endfor %}
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-5 mb-sm-5">
                                 <div class="card">
-                                    <h5 class="mb-10">By Price</h5>
+                                    <h5 class="mb-10">Fill By Price</h5>
                                     <div class="sidebar-widget price_range range">
                                         <div class="price-filter mb-20">
                                             <div class="price-filter-inner">
@@ -240,11 +228,19 @@ input[type=range]::-webkit-slider-runnable-track {
                                                 </div>
                                                 <div class="product-card-bottom">
                                                     <div class="product-price">
-                                                        <span>${{p.price}}</span>
+                                                        <span class="current-price text-brand">$</span><span class="current-product-price-{{p.id}}">{{p.price}}</span>
                                                         <span class="old-price">${{p.old_price}}</span>
                                                     </div>
                                                     <div class="add-cart">
-                                                        <a class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                                        <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{p.id}}">
+                                                        <input type="hidden" value="{{p.pid}}"class="product-quantity-{{p.id}}">
+                                                        <input type="hidden" value="{{p.pid}}"class="product-pid-{{p.id}}">
+                                                        <input type="hidden" class="product-image-{{p.id}}" value="{{p.image.url}}">
+                                                        <input type="hidden" class="product-id-{{p.id}}" value="{{p.id}}" >
+                                                        <input type="hidden" class="product-title-{{p.id}}" value="{{p.title}}">
+
+
+                                                        <button class="add add-to-cart-btn" data-index="{{p.id}}" style="border:none;" id="add-to-cart-btn" ><i class="fi-rs-shopping-cart mr-5"></i>Add </button>
                                                     </div>
                                                 </div>
                                             </div>
