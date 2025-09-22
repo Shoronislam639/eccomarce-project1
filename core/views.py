@@ -1,10 +1,11 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from core.models import Product,Category,Vendor,CartOrderItems,CartOrder,wishlist,Address,ProductImage,ProductReviews
 from django.db.models import Count,Avg
 from taggit.models import Tag
 from core.forms import ProductReviewForm
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 
 
@@ -236,5 +237,75 @@ def add_to_cart(request):
             request.session['Cart_data_obj']=Cart_data
     else:
         request.session['Cart_data_obj'] = Cart_product
-    return JsonResponse({"data":request.session['Cart_data_obj'],'totalcartitems':len(request.session['Cart_data_obj'])})        
+    return JsonResponse({"data":request.session['Cart_data_obj'],'totalcartitems':len(request.session['Cart_data_obj'])})      
+
+
+
+
+
+  
         
+def cart_view(request):
+    cart_total_amount = 0
+    cart_data = request.session.get('Cart_data_obj', {})
+
+    # Update each item's total price
+    for item in cart_data.values():
+        try:
+            qty = int(item.get('qty', 0))
+            price = float(item.get('price', 0.0))
+            item['total_price'] = qty * price
+            cart_total_amount += item['total_price']
+        except (ValueError, TypeError):
+            item['total_price'] = 0
+
+    if not cart_data:
+        messages.warning(request, 'Your Cart is empty')
+        return redirect('core:home')
+
+    return render(request, "cart.html", {
+        'Cart_data': cart_data,
+        'totalcartitems': len(cart_data),
+        'cart_total_amount': cart_total_amount
+    })
+    
+    
+    
+
+
+def delete_item_from_cart(request):
+    product_id = request.GET.get('id')  # ✅ fixed
+
+    if 'Cart_data_obj' in request.session:
+        if product_id in request.session['Cart_data_obj']:
+            cart_data = request.session['Cart_data_obj']
+            del cart_data[product_id]  # ✅ cleaned
+            request.session['Cart_data_obj'] = cart_data
+
+    # Initialize values
+    cart_total_amount = 0
+    cart_data = request.session.get('Cart_data_obj', {})
+
+    # Update total price per item
+    for item in cart_data.values():
+        try:
+            qty = int(item.get('qty', 0))
+            price = float(item.get('price', 0.0))
+            item['total_price'] = qty * price
+            cart_total_amount += item['total_price']
+        except (ValueError, TypeError):
+            item['total_price'] = 0
+
+    # Render updated cart list
+    context = render_to_string("async/cart-list.html", {
+        'Cart_data': cart_data,
+        'totalcartitems': len(cart_data),
+        'cart_total_amount': cart_total_amount,
+    })
+
+    return JsonResponse({
+        "data": context,
+        "totalcartitems": len(cart_data),
+    })
+
+    

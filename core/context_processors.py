@@ -1,6 +1,7 @@
 from core.models import Product,Category,Vendor,CartOrderItems,CartOrder,wishlist,Address,ProductImage,ProductReviews
 from ast import Add
 from django.db.models import Min,Max
+from django import template
 
 
 def default(request): 
@@ -21,3 +22,8 @@ def default(request):
        "vendors":vendors,
        "min_max_price":min_max_price,
        }
+    
+    
+    
+
+
