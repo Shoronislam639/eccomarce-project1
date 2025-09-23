@@ -24,6 +24,15 @@ def default(request):
        }
     
     
-    
+# core/context_processors.py
+
+def cart_context(request):
+    cart_data = request.session.get('Cart_data_obj', {})
+    return {
+        'Cart_data': cart_data,
+        'totalcartitems': len(cart_data),
+        
+    }
+
 
 
