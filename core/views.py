@@ -271,7 +271,7 @@ def cart_view(request):
     
     
     
-
+                #Update Cart#
 
 def delete_item_from_cart(request):
     product_id = request.GET.get('id')  # ✅ fixed
@@ -309,3 +309,72 @@ def delete_item_from_cart(request):
     })
 
     
+    
+    
+    
+    
+def update_item_cart(request):
+    product_id = request.GET.get('id')
+    product_qty = request.GET.get('qty')
+
+    if 'Cart_data_obj' in request.session:
+        cart_data = request.session['Cart_data_obj']
+
+        if product_id in cart_data:
+            try:
+                product_qty = int(product_qty)
+                if product_qty < 1:
+                    product_qty = 1
+            except ValueError:
+                product_qty = 1
+
+            cart_data[product_id]['qty'] = product_qty  # ✅ fixed key
+            request.session['Cart_data_obj'] = cart_data
+
+    cart_total_amount = 0
+    cart_data = request.session.get('Cart_data_obj', {})
+
+    # Update total price per item
+    for item in cart_data.values():
+        try:
+            qty = int(item.get('qty', 0))
+            price = float(item.get('price', 0.0))
+            item['total_price'] = qty * price
+            cart_total_amount += item['total_price']
+        except (ValueError, TypeError):
+            item['total_price'] = 0
+
+    # Render updated cart list
+    context = render_to_string("async/cart-list.html", {
+        'Cart_data': cart_data,
+        'totalcartitems': len(cart_data),
+        'cart_total_amount': cart_total_amount,
+    })
+
+    return JsonResponse({
+        "data": context,
+        "totalcartitems": len(cart_data),
+    })
+
+
+
+def checkout_view(request):
+    
+    cart_total_amount = 0
+    cart_data = request.session.get('Cart_data_obj', {})
+
+    
+    for item in cart_data.values():
+        try:
+            qty = int(item.get('qty', 0))
+            price = float(item.get('price', 0.0))
+            item['total_price'] = qty * price
+            cart_total_amount += item['total_price']
+        except (ValueError, TypeError):
+            item['total_price'] = 0
+    
+    return render(request,"checkout.html", {
+        'Cart_data': cart_data,
+        'totalcartitems': len(cart_data),
+        'cart_total_amount': cart_total_amount
+    })

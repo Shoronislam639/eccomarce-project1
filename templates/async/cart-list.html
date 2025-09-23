@@ -70,8 +70,7 @@
                                     <!-- Quantity Input -->
                                     <td class="text-center detail-info" data-title="Qty">
                                         <div class="detail-extralink mr-15">
-                                            <input type="number" placeholder="Qty" class="w-25" name="qty_{{ product_id }}" value="{{ item.qty }}" min="1">
-                                        </div>
+                                            <input type="number" placeholder="Qty" class="w-25 product_qty-{{ product_id }}"  name="qty_{{ product_id }}" value="{{ item.qty }}" id="" min="1">
                                     </td>
 
                                     <!-- Total Price per Item -->
@@ -81,8 +80,11 @@
 
                                     
                                     <!-- Refresh Button -->
-                                    <td class="action text-center" data-title="Refresh"><a href="#" class="refresh-product" data-product="{{ product_id }}"><i class="fi-rs-refresh"></i></a></td>
-
+                                    <td class="action text-center" data-title="Remove">
+                                    <button data-product="{{ product_id }}" style="border:none; background:none;" class="update-product">
+                                        <i class="fi-rs-refresh"></i>
+                                        </button>
+                                    </td>
                                     <!-- Remove Button -->
                                     <td class="action text-center" data-title="Remove">
                                     <button data-product="{{ product_id }}" style="border:none; background:none;" class="delete-product">
@@ -99,7 +101,7 @@
                     <div class="divider-2 mb-30"></div>
                     <div class="cart-action d-flex justify-content-between">
                         <a href="{%url 'core:product_list_view'%}" class="btn "><i class="fi-rs-arrow-left mr-10"></i>Continue Shopping</a>
-                        <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-refresh mr-10"></i>Update Cart</a>
+                        <a class="btn mr-10 mb-sm-15 update-product" data-product="{{ product_id }}"><i class="fi-rs-refresh mr-10"></i>Update Cart</a>
                     </div>
                     <div class="row mt-50">
                         <div class="col-lg-7">

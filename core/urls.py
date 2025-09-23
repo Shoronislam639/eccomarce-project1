@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from core.views import search_view,ajax_add_review,tag_list,vendor_detail_view,filter_product,add_to_cart,cart_view,delete_item_from_cart
+from core.views import search_view,ajax_add_review,tag_list,vendor_detail_view,filter_product,add_to_cart,cart_view,delete_item_from_cart,update_item_cart,checkout_view
 
 app_name = 'core'  
 
@@ -34,5 +34,12 @@ urlpatterns = [
     
     #delete-from-cart
     path("delete-from-cart/",delete_item_from_cart,name="delete-from-cart"),
+    
+    #update Cart
+    
+    path("update-cart/",update_item_cart,name="update-cart"),
+    
+    #Cheakout
+    path("checkout/",checkout_view,name="checkout"),
     
     ]
