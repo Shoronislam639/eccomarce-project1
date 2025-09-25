@@ -101,7 +101,7 @@
                     <div class="divider-2 mb-30"></div>
                     <div class="cart-action d-flex justify-content-between">
                         <a href="{%url 'core:product_list_view'%}" class="btn "><i class="fi-rs-arrow-left mr-10"></i>Continue Shopping</a>
-                        <a class="btn mr-10 mb-sm-15 update-product" data-product="{{ product_id }}"><i class="fi-rs-refresh mr-10"></i>Update Cart</a>
+                        <a class="btn mr-10 mb-sm-15 update-product" href="{%url 'core:checkout'%}" data-product="{{ product_id }}"><i class="fi-rs-refresh mr-10"></i>Checkout</a>
                     </div>
                     <div class="row mt-50">
                         <div class="col-lg-7">

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ckeditor',
      'core',                   
     'userauth',
+    'paypal.standard.ipn',
    
 ]
 
@@ -149,6 +150,13 @@ JAZZMIN_SETTINGS = {
     "login_logo": "assets/imgs/theme/loading.gif",
 }
 
+
+LOGIN_URL= "userauth:sign-in"
+
+
+
+
+
 AUTH_USER_MODEL = "userauth.User"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -167,5 +175,8 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+
+PAYPAL_RECEIVER_EMAIL = 'sb-c5xxxxx@business.example.com'
+PAYPAL_TEST = True
 
 

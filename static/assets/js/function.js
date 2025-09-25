@@ -179,7 +179,7 @@ $(document).ready(function(){
         dataType: "json",
         success: function(response){
             $(".cart-items-count").text(response.totalcartitems);
-            $("#cart-list").html(response.data); // Make sure #cart-list exists
+            $("#cart-list").html(response.data); 
             }
         })
     })
@@ -204,12 +204,13 @@ $(document).ready(function(){
         dataType: "json",
         success: function(response){
             $(".cart-items-count").text(response.totalcartitems);
-            $("#cart-list").html(response.data); // Make sure #cart-list exists
+            $("#cart-list").html(response.data); 
             }
         })
     })
 
 
+    $(document).on("click")
 
 
 

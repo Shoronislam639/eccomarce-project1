@@ -2,6 +2,24 @@
 {% extends "base.html" %} 
 {% block content %}
     
+
+<style>
+    .paypal-button-wrapper form {
+    display: inline-block;
+    max-width: 300px;
+    overflow: hidden;
+}
+
+.paypal-button-wrapper input[type="image"] {
+    width: 100%;
+    height: auto;
+    max-height: 90px; 
+}
+
+</style>
+
+
+
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -712,7 +730,12 @@
                             <img class="mr-15" src="{{s}}assets/imgs/theme/icons/payment-master.svg" alt="">
                             <img src="{{s}}assets/imgs/theme/icons/payment-zapper.svg" alt="">
                         </div>
-                        <a href="#" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a>
+
+                        <div class="paypal-button-wrapper">
+                            {{ paypal_payment_button.render }}
+                        </div>
+
+                        <!--<a href="#" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a> -->
                     </div>
                 </div>
             </div>

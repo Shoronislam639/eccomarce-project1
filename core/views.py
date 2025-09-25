@@ -9,6 +9,13 @@ from django.contrib import messages
 
 
 
+from django.urls import reverse
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from paypal.standard.forms import PayPalPaymentsForm
+
+
 
 def home(request):
     
@@ -357,8 +364,22 @@ def update_item_cart(request):
     })
 
 
-
+@login_required
 def checkout_view(request):
+    
+    host = request.get_host()
+    paypal_dict ={
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount':'200',
+        'item_name':'Order-Item-No-3',
+        'invoice':'Invoice_NO-3',
+        'Currency_code':'USD',
+        'notify_url':'http://(){}'.format(host,reverse('core:paypal-ipn')),
+        'cancel_url':'http://(){}'.format(host,reverse('core:payment_failed')),
+        'return_url':'http://(){}'.format(host,reverse('core:payment_completed')),
+    }
+    
+    paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
     
     cart_total_amount = 0
     cart_data = request.session.get('Cart_data_obj', {})
@@ -376,5 +397,18 @@ def checkout_view(request):
     return render(request,"checkout.html", {
         'Cart_data': cart_data,
         'totalcartitems': len(cart_data),
-        'cart_total_amount': cart_total_amount
+        'cart_total_amount': cart_total_amount,
+        'paypal_payment_button':paypal_payment_button
     })
+    
+    
+    
+def payment_completed_view(request):
+    return render(request,'payment-completed.html')
+
+
+
+
+    
+def payment_failed_view(request):
+    return render(request,'payment-failed.html')
