@@ -150,6 +150,7 @@ $(document).ready(function(){
                 'qty':quantity,
                 'title':product_title,
                 'price':product_price,
+                
             },
             dataType:'json',
             beforeSend:function(){

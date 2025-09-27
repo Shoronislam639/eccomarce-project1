@@ -6,6 +6,7 @@ from core.forms import ProductReviewForm
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib import messages
+from datetime import date
 
 
 
@@ -255,6 +256,7 @@ def add_to_cart(request):
 def cart_view(request):
     cart_total_amount = 0
     cart_data = request.session.get('Cart_data_obj', {})
+    
 
     # Update each item's total price
     for item in cart_data.values():
@@ -335,7 +337,7 @@ def update_item_cart(request):
             except ValueError:
                 product_qty = 1
 
-            cart_data[product_id]['qty'] = product_qty  # ✅ fixed key
+            cart_data[product_id]['qty'] = product_qty  
             request.session['Cart_data_obj'] = cart_data
 
     cart_total_amount = 0
@@ -402,13 +404,40 @@ def checkout_view(request):
     })
     
     
-    
+@login_required    
 def payment_completed_view(request):
-    return render(request,'payment-completed.html')
-
-
-
+    
+    cart_total_amount = 0
+    cart_data = request.session.get('Cart_data_obj', {})
 
     
+    for item in cart_data.values():
+        cart_total_amount = 0
+        cart_data = request.session.get('Cart_data_obj', {})
+
+    
+        for item in cart_data.values():
+            try:
+                qty = int(item.get('qty', 0))
+                price = float(item.get('price', 0.0))
+                item['total_price'] = qty * price
+                cart_total_amount += item['total_price']
+                
+                
+            except (ValueError, TypeError):
+                item['total_price'] = 0
+    return render(request,"payment-completed.html", {
+        'Cart_data': cart_data,
+        'totalcartitems': len(cart_data),
+        'cart_total_amount': cart_total_amount,
+        'today': date.today(),
+        
+        
+       
+    })
+
+
+
+@login_required    
 def payment_failed_view(request):
     return render(request,'payment-failed.html')

@@ -36,16 +36,15 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="logo d-flex align-items-center">
-                                            <a href="index.html" class="mr-20"><img src="{{s}}assets/imgs/theme/favicon.svg" "logo" /></a>
+                                            <a href="{%url 'core:home'%}" class="mr-20"><img src="{{s}}assets/imgs/theme/favicon.svg" "logo" /></a>
                                             <div class="text">
-                                                <strong class="text-brand">NestMart Inc</strong> <br />
-                                                205 North, Suite 810, Chicago, USA
+                                                <strong class="text-brand" > <a href="{%url 'core:home'%}" class="mr-20">NestMart Inc</a></strong> 
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <h2>INVOICE</h2>
-                                        <h6>ID Number: <span class="text-brand">98657</span></h6>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -58,69 +57,40 @@
                                         <thead class="bg-active">
                                             <tr>
                                                 <th>Title</th>
-                                                <th class="text-center">Price</th>
+                                                <th class="text-center">Unit Price</th>
                                                 <th class="text-center">Quantity</th>
                                                 <th class="text-right">Amount</th>
                                             </tr>
                                         </thead>
+                                        
                                         <tbody>
+                                        {% for product_id, item in Cart_data.items %}
                                             <tr>
                                                 <td>
                                                     <div class="item-desc-1">
-                                                        <span>Field Roast Chao Cheese Creamy Original</span>
-                                                        <small>SKU: FWM15VKT</small>
+                                                        <span>{{ item.title }}</span>
+                                                        {% if p.sku %}
+                                                        <small>SKU: {{ p.sku }}</small>
+                                                        {% endif %}
+
                                                     </div>
                                                 </td>
-                                                <td class="text-center">$10.99</td>
-                                                <td class="text-center">1</td>
-                                                <td class="text-right">$10.99</td>
+                                                <td class="text-center">${{ item.price|floatformat:2 }}</td>
+                                                <td class="text-center">{{item.qty}}</td>
+                                                <td class="text-right">${{ item.total_price|floatformat:2 }}</td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="item-desc-1">
-                                                        <span>Blue Diamond Almonds Lightly Salted</span>
-                                                        <small>SKU: FWM15VKT</small>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">$20.00</td>
-                                                <td class="text-center">3</td>
-                                                <td class="text-right">$60.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="item-desc-1">
-                                                        <span>Fresh Organic Mustard Leaves Bell Pepper</span>
-                                                        <small>SKU: KVM15VK</small>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">$640.00</td>
-                                                <td class="text-center">1</td>
-                                                <td class="text-right">$640.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="item-desc-1">
-                                                        <span>All Natural Italian-Style Chicken Meatballs</span>
-                                                        <small>SKU: 98HFG</small>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">$240.00</td>
-                                                <td class="text-center">1</td>
-                                                <td class="text-right">$240.00</td>
-                                            </tr>
+                                        {%endfor%}
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">SubTotal</td>
-                                                <td class="text-right">$1710.99</td>
+                                                <td class="text-right">${{cart_total_amount|floatformat:2 }}</td>
                                             </tr>
-                                            <tr>
-                                                <td colspan="3" class="text-end f-w-600">Tax</td>
-                                                <td class="text-right">$85.99</td>
-                                            </tr>
+                                            
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">Grand Total</td>
-                                                <td class="text-right f-w-600">$1795.99</td>
+                                                <td class="text-right f-w-600">${{cart_total_amount|floatformat:2 }}</td>
                                             </tr>
                                         </tbody>
+                                        
                                     </table>
                                 </div>
                             </div>
@@ -129,15 +99,15 @@
                                     <div class="col-md-6">
                                         <h6 class="mb-15">Invoice Infor</h6>
                                         <p class="font-sm">
-                                            <strong>Issue date:</strong> 20 march, 2022<br />
-                                            <strong>Invoice To:</strong> NestMart Inc<br />
-                                            <strong>Swift Code:</strong> BFTV VNVXS
+                                            <strong>Issue date:</strong> {{today}}<br />
+                                            <strong>Invoice To:</strong> {{request.user|title}}<br />
+                                            
                                         </p>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <h6 class="mb-15">Total Amount</h6>
-                                        <h3 class="mt-0 mb-0 text-brand">$1795.99</h3>
-                                        <p class="mb-0 text-muted">Taxes Included</p>
+                                        <h3 class="mt-0 mb-0 text-brand">${{cart_total_amount|floatformat:2 }}</h3>
+                                 
                                     </div>
                                 </div>
                                 <div class="row text-center">
@@ -147,8 +117,8 @@
                             </div>
                         </div>
                         <div class="invoice-btn-section clearfix d-print-none">
-                            <a href="javascript:window.print()" class="btn btn-lg btn-custom btn-print hover-up"> <img src="{{s}}assets/imgs/theme/icons/icon-print.svg"  /> Print </a>
-                            <a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up"> <img src="{{s}}assets/imgs/theme/icons/icon-download.svg"  /> Download </a>
+                            <a href="javascript:window.print()" class="btn btn-lg btn-custom btn-print hover-up">Print </a>
+                            <a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up">Download </a>
                         </div>
                     </div>
                 </div>
@@ -156,11 +126,11 @@
         </div>
     </div>
     <!-- Vendor JS-->
-    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="{{s}}assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="{{s}}assets/js/vendor/jquery-3.6.0.min.js"></script>
     <!-- Invoice JS -->
-    <script src="'assets/js/invoice/jspdf.min.js"></script>
-    <script src="assets/js/invoice/invoice.js"></script>
+    <script src="{{s}}assets/js/invoice/jspdf.min.js"></script>
+    <script src="{{s}}assets/js/invoice/invoice.js"></script>
 </body>
 
 </html>
