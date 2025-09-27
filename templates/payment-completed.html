@@ -1,6 +1,5 @@
-
-{% extends 'base.html' %}
-{% block content %}
+{% load static %}
+{% static "" as s %}
 
 
 
@@ -16,10 +15,11 @@
     <meta property="og:title" content=" />
     <meta property="og:type" content=" />
     <meta property="og:url" content=" />
-    <meta property="og:image" content=" />
+    <meta property="og:image content=" />
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{s}}assets/imgs/theme/favicon.svg" />
-    <link rel="stylesheet" href="{{s}}assets/css/main.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{s}}assets/imgs/theme/favicon.svg" />
+    <link rel="stylesheet" href="{{s}}assets/css/main.css"/>
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                                         <div class="logo d-flex align-items-center">
                                             <a href="{%url 'core:home'%}" class="mr-20"><img src="{{s}}assets/imgs/theme/favicon.svg" "logo" /></a>
                                             <div class="text">
-                                                <strong class="text-brand" > <a href="{%url 'core:home'%}" class="mr-20">NestMart Inc</a></strong> 
+                                                <strong class="text-brand" > <a href="{%url 'core:home'%}" class="mr-20">Nest Mart Inc</a></strong> 
                                             </div>
                                         </div>
                                     </div>
@@ -105,14 +105,14 @@
                                         </p>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <h6 class="mb-15">Total Amount</h6>
+                                        <h6 class="mb-15">Total pay Amount</h6>
                                         <h3 class="mt-0 mb-0 text-brand">${{cart_total_amount|floatformat:2 }}</h3>
                                  
                                     </div>
                                 </div>
                                 <div class="row text-center">
                                     <div class="hr mt-30 mb-30"></div>
-                                    <p class="mb-0 text-muted"><strong>Note:</strong>This is computer generated receipt and does not require physical signature.</p>
+                                    <p class="mb-0 text-muted"><strong>Note:</strong>Thank you for purchase please take an screenshot.</p>
                                 </div>
                             </div>
                         </div>
@@ -136,4 +136,3 @@
 </html>
 
 
-{% endblock %}
