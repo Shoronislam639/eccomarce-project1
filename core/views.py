@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib import messages
 from datetime import date
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -250,7 +251,6 @@ def add_to_cart(request):
 
 
 
-
   
         
 def cart_view(request):
@@ -368,40 +368,57 @@ def update_item_cart(request):
 
 @login_required
 def checkout_view(request):
-    
-    host = request.get_host()
-    paypal_dict ={
-        'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount':'200',
-        'item_name':'Order-Item-No-3',
-        'invoice':'Invoice_NO-3',
-        'Currency_code':'USD',
-        'notify_url':'http://(){}'.format(host,reverse('core:paypal-ipn')),
-        'cancel_url':'http://(){}'.format(host,reverse('core:payment_failed')),
-        'return_url':'http://(){}'.format(host,reverse('core:payment_completed')),
-    }
-    
-    paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
-    
+    total_amount = 0
     cart_total_amount = 0
-    cart_data = request.session.get('Cart_data_obj', {})
+    cart_order_products = []
 
-    
-    for item in cart_data.values():
-        try:
-            qty = int(item.get('qty', 0))
-            price = float(item.get('price', 0.0))
-            item['total_price'] = qty * price
-            cart_total_amount += item['total_price']
-        except (ValueError, TypeError):
-            item['total_price'] = 0
-    
-    return render(request,"checkout.html", {
-        'Cart_data': cart_data,
-        'totalcartitems': len(cart_data),
-        'cart_total_amount': cart_total_amount,
-        'paypal_payment_button':paypal_payment_button
+    if 'Cart_data_obj' in request.session:
+        for p_id, item in request.session['Cart_data_obj'].items():
+            qty = int(item['qty'])
+            price = float(item['price'])
+            item_total = qty * price
+            total_amount += item_total
+            cart_total_amount += item_total
+
+        order = CartOrder.objects.create(
+            user=request.user,
+            price=total_amount
+        )
+
+        for p_id, item in request.session['Cart_data_obj'].items():
+            cart_order_product = CartOrderItems.objects.create(
+                order=order,
+                invoice_no="INVOICE_NO-" + str(order.id),
+                item=item['title'],
+                image=item['image'],
+                qty=item['qty'],
+                price=item['price'],
+                total=float(item['qty']) * float(item['price'])
+            )
+            cart_order_products.append(cart_order_product)
+
+    host = request.get_host()
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': cart_total_amount,
+        'item_name': 'Order-Item-No-' + str(order.id),
+        'invoice': 'Invoice_NO-' + str(order.id),
+        'currency_code': 'USD',  
+        'notify_url': 'http://{}{}'.format(host, reverse('core:paypal-ipn')),
+        'cancel_url': 'http://{}{}'.format(host, reverse('core:payment_failed')),
+        'return_url': 'http://{}{}'.format(host, reverse('core:payment_completed')),
+    }
+
+    paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
+
+    return render(request, "checkout.html", {
+        'Cart_data': request.session['Cart_data_obj'],
+        'totalcartitems': len(request.session['Cart_data_obj']),
+        'paypal_payment_button': paypal_payment_button,
+        'cart_order_products': cart_order_products,
+        'cart_total_amount': cart_total_amount, 
     })
+
     
     
 @login_required    
@@ -441,3 +458,29 @@ def payment_completed_view(request):
 @login_required    
 def payment_failed_view(request):
     return render(request,'payment-failed.html')
+
+
+
+
+@login_required
+def customer_dashboard(request):
+    orders = CartOrder.objects.filter(user=request.user,)
+    context = {
+        "orders": orders
+    }
+    return render(request,'dashboard.html',context)
+
+
+4
+
+def order_detail(request, id):
+    order = get_object_or_404(CartOrder, id=id)  
+    order_item = CartOrderItems.objects.filter(order=order)  
+    context = {
+        'order': order,
+        'order_item': order_item,
+    }
+    return render(request, 'order-detail.html', context)
+
+
+

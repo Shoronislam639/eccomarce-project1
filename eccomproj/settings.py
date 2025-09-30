@@ -176,7 +176,7 @@ CKEDITOR_CONFIGS = {
 }
 
 
-PAYPAL_RECEIVER_EMAIL = 'sb-c5xxxxx@business.example.com'
+PAYPAL_RECEIVER_EMAIL = 'sb-merchant@example.com'
 PAYPAL_TEST = True
 
 
