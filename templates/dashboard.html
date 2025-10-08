@@ -11,8 +11,8 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                    <span></span> Pages <span></span> My Account
+                    <a href="{%url 'core:home'%}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> <a href="{%url 'core:product_list_view'%}"> Shop </a><span></span><a href="{%url 'core:user-dashboard'%}"> My Account</a>
                 </div>
             </div>
         </div>
@@ -122,19 +122,39 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                      <h2>Add Address</h2>
+                                        <form method="POST" action="" style="display: flex; gap: 10px; align-items: center;">
+                                            {% csrf_token %}
+                                            
+                                            <input type="text" name="address" placeholder="Enter address" required style="padding: 5px; width: 300px;">
+                                            
+                                            <input type="text" name="mobile_number" placeholder="Enter mobile number" required style="padding: 5px; width: 250px;">
+                                            
+                                            <button type="submit" style="padding: 10px 15px;">Add</button>
+                                        </form>
+
+                                            <hr>
+
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="card mb-3 mb-lg-0">
                                                     <div class="card-header">
-                                                        <h3 class="mb-0">Billing Address</h3>
+                                                        <h3 class="mb-0">Address 1</h3>
                                                     </div>
                                                     <div class="card-body">
                                                         <address>
-                                                            3522 Interstate<br />
-                                                            75 Business Spur,<br />
-                                                            Sault Ste. <br />Marie, MI 49783
+                                                            <p>{%for add in address%}</p>
+                                                            <p>{{add.address}}</p>
+                                                           <p>{{add.mobile_number}}</p>
+                                                            <p>
+                                                                {% if add.status %}
+                                                                    <i class="fas fa-check text-success"></i>
+                                                                {% else %}
+                                                                    <i class="fas fa-times text-danger"></i>
+                                                                {% endif %}
+                                                            </p>
+                                                           {%endfor%}
                                                         </address>
-                                                        <p>New York</p>
                                                         <a href="#" class="btn-small">Edit</a>
                                                     </div>
                                                 </div>
@@ -142,14 +162,23 @@
                                             <div class="col-lg-6">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <h5 class="mb-0">Shipping Address</h5>
+                                                        <h5 class="mb-0">Address 2</h5>
                                                     </div>
                                                     <div class="card-body">
                                                         <address>
-                                                            4299 Express Lane<br />
-                                                            Sarasota, <br />FL 34249 USA <br />Phone: 1.941.227.4444
+                                                            <p>{%for add in address%}</p>
+                                                            <p>{{add.address}}</p>
+                                                           <p>{{add.mobile_number}}</p>
+                                                            <p>
+                                                                {% if add.status %}
+                                                                    <i class="fas fa-check text-success"></i>
+                                                                {% else %}
+                                                                    <i class="fas fa-times text-danger"></i>
+                                                                {% endif %}
+                                                            </p>
+                                                           {%endfor%}
                                                         </address>
-                                                        <p>Sarasota</p>
+                                                       
                                                         <a href="#" class="btn-small">Edit</a>
                                                     </div>
                                                 </div>

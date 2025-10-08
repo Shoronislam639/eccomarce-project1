@@ -39,7 +39,7 @@ class WishlistAdmin(admin.ModelAdmin):
       
     
 class AddressAdmin(admin.ModelAdmin):
-    list_display=['user','address','status']
+    list_display=['user','address','mobile_number','status']
     
     
 

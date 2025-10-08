@@ -235,6 +235,7 @@ class wishlist(models.Model):
 class Address(models.Model):
     user= models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     address = models.CharField(max_length=100,null=True)
+    mobile_number = models.CharField(max_length=20,null=True)
     status = models.BooleanField(default=False) 
         
         

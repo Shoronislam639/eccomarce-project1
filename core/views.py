@@ -464,14 +464,26 @@ def payment_failed_view(request):
 
 @login_required
 def customer_dashboard(request):
-    orders = CartOrder.objects.filter(user=request.user,)
+    if request.method == 'POST':
+        address_text = request.POST.get('address')
+        mobile_number = request.POST.get('mobile_number')
+        if address_text and mobile_number:
+            Address.objects.create(
+                user=request.user,
+                address=address_text,
+                mobile_number=mobile_number
+            )
+    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    address = Address.objects.filter(user=request.user)
+    
     context = {
-        "orders": orders
+        "orders": orders,
+        "address":address,
     }
     return render(request,'dashboard.html',context)
 
 
-4
+
 
 def order_detail(request, id):
     order = get_object_or_404(CartOrder, id=id)  
