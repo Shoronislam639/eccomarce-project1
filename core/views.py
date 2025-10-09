@@ -464,18 +464,20 @@ def payment_failed_view(request):
 
 @login_required
 def customer_dashboard(request):
+    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    address = Address.objects.filter(user=request.user)
+    
     if request.method == 'POST':
         address_text = request.POST.get('address')
         mobile_number = request.POST.get('mobile_number')
-        if address_text and mobile_number:
-            Address.objects.create(
+        new_address = Address.objects.create(
                 user=request.user,
                 address=address_text,
                 mobile_number=mobile_number
             )
-    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
-    address = Address.objects.filter(user=request.user)
-    
+        messages.success(request,"Address added Succesfully.")
+        return redirect('core:user-dashboard')
+
     context = {
         "orders": orders,
         "address":address,
@@ -495,4 +497,39 @@ def order_detail(request, id):
     return render(request, 'order-detail.html', context)
 
 
+@login_required
+def wishlist_view(request):
+    wishlist_items = wishlist.objects.all() 
+    context = {
+        "w": wishlist_items
+    }
+    return render(request, "wishlist.html", context)
+    
 
+def add_to_wishlist(request):
+    product_id = request.GET['id']
+    product = Product.objects.get(id=product_id)
+
+    context = {}
+
+    wishlist_count = wishlist.objects.filter(
+        product=product,
+        user=request.user
+    ).count()
+
+    print(wishlist_count)
+
+    if wishlist_count > 0:
+        context = {
+            "bool": False  # not added again
+        }
+    else:
+        new_wishlist = wishlist.objects.create(
+            product=product,
+            user=request.user
+        )
+        context = {
+            "bool": True  # added now
+        }
+
+    return JsonResponse(context)

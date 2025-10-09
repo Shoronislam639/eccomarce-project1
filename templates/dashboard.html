@@ -139,48 +139,57 @@
                                             <div class="col-lg-6">
                                                 <div class="card mb-3 mb-lg-0">
                                                     <div class="card-header">
-                                                        <h3 class="mb-0">Address 1</h3>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <address>
-                                                            <p>{%for add in address%}</p>
-                                                            <p>{{add.address}}</p>
-                                                           <p>{{add.mobile_number}}</p>
-                                                            <p>
-                                                                {% if add.status %}
-                                                                    <i class="fas fa-check text-success"></i>
-                                                                {% else %}
-                                                                    <i class="fas fa-times text-danger"></i>
-                                                                {% endif %}
-                                                            </p>
-                                                           {%endfor%}
-                                                        </address>
-                                                        <a href="#" class="btn-small">Edit</a>
+                                                     <!-- Address 1 -->
+                                                        {% if address|length > 0 %}
+                                                            {% with address.0 as add %}
+                                                                <h3 class="mb-0">Address 1</h3>
+                                                                <div class="card-body">
+                                                                    <address>
+                                                                        <p>{{ add.address }}</p>
+                                                                        <p>{{ add.mobile_number }}</p>
+                                                                         <p>
+                                                                                {% if add.status %}
+                                                                                    <span class="text-success">Active Address</span>
+                                                                                    <i class="fas fa-check text-success"></i>
+                                                                                {% else %}
+                                                                                    <span class="text-danger">Inactive Address</span>
+                                                                                    <i class="fas fa-times text-danger"></i>
+                                                                                {% endif %}
+                                                                            </p>
+                                                                    </address>
+                                                                    <button type="submit" class="btn btn-sm btn-outline-primary">Make Default</button>
+                                                                </div>
+                                                            {% endwith %}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
-                                                <div class="card">
+                                                <div class="card mb-3 mb-lg-0">
                                                     <div class="card-header">
-                                                        <h5 class="mb-0">Address 2</h5>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <address>
-                                                            <p>{%for add in address%}</p>
-                                                            <p>{{add.address}}</p>
-                                                           <p>{{add.mobile_number}}</p>
-                                                            <p>
-                                                                {% if add.status %}
-                                                                    <i class="fas fa-check text-success"></i>
-                                                                {% else %}
-                                                                    <i class="fas fa-times text-danger"></i>
-                                                                {% endif %}
-                                                            </p>
-                                                           {%endfor%}
-                                                        </address>
-                                                       
-                                                        <a href="#" class="btn-small">Edit</a>
-                                                    </div>
+                                             <!-- Address 2 -->
+                                                            {% if address|length > 1 %}
+                                                                {% with address.1 as add %}
+                                                                     <h3 class="mb-0">Address 2</h3>
+                                                                <div class="card-body">
+                                                                        <address>
+                                                                            <p>{{ add.address }}</p>
+                                                                            <p>{{ add.mobile_number }}</p>
+                                                                            <p>
+                                                                                {% if add.status %}
+                                                                                    <span class="text-success">Active Address</span>
+                                                                                    <i class="fas fa-check text-success"></i>
+                                                                                {% else %}
+                                                                                    <span class="text-danger">Inactive Address</span>
+                                                                                    <i class="fas fa-times text-danger"></i>
+                                                                                {% endif %}
+                                                                            </p>
+                                                                        </address>
+                                                                        <button type="submit" class="btn btn-sm btn-outline-primary">Make Default</button>
+                                                                    </div>
+                                                                {% endwith %}
+                                                            {% endif %} 
+                                                   </div>
                                                 </div>
                                             </div>
                                         </div>

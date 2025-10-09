@@ -1,6 +1,6 @@
 from django.urls import path,include
 from . import views
-from core.views import search_view,ajax_add_review,tag_list,vendor_detail_view,filter_product,add_to_cart,cart_view,delete_item_from_cart,update_item_cart,checkout_view,payment_completed_view,payment_failed_view,customer_dashboard,order_detail
+from core.views import search_view,ajax_add_review,tag_list,vendor_detail_view,filter_product,add_to_cart,cart_view,delete_item_from_cart,update_item_cart,checkout_view,payment_completed_view,payment_failed_view,customer_dashboard,order_detail,wishlist_view,add_to_wishlist
 
 app_name = 'core'  
 
@@ -57,6 +57,10 @@ urlpatterns = [
     #order_detail
     path("user-dashboard/order/<int:id>",order_detail,name="order-detail"),
     
+    
+     #wishlist
+    path("wishlist/",wishlist_view,name="wishlist"),
+    path("add-to-wishlist/",add_to_wishlist,name="add-to-wishlist")
     
     
 ]

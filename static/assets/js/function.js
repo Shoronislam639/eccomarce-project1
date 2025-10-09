@@ -210,8 +210,36 @@ $(document).ready(function(){
         })
     })
 
+    $(document).on("click", ".add-to-wishlist", function () {
+        let product_id = $(this).attr("data-product-item");
+        let this_val = $(this);
 
-    $(document).on("click")
+        console.log("Product ID IS", product_id);
+
+        $.ajax({
+            url: "add-to-wishlist/",
+            data: {
+                id: product_id
+            },
+            dataType: "json",
+            beforeSend: function () {
+                this_val.html("<i class='fa fa-spinner fa-spin'></i>");
+            },
+            success: function (response) {
+                this_val.html("<i class='fa fa-heart'></i>");
+
+                if (response.bool) {
+                    let wishlistCountElem = $(".wishlist-count");
+                    let currentCount = parseInt(wishlistCountElem.text()) || 0;
+                    wishlistCountElem.text(currentCount + 1);
+                } else {
+                    alert("Already in your wishlist!");
+                }
+            }
+
+        })
+    })
+
 
 
 
